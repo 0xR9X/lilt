@@ -1,5 +1,3 @@
-import * as stylex from "@stylexjs/stylex";
-import { styles } from "@/components/music/styles";
 import { getMusicRoot } from "@/audio/composition/roots";
 import { useMusicRuntime } from "@/audio/playback/react";
 import { useMusicSettings } from "@/audio/musicSettings";
@@ -10,7 +8,7 @@ export function MusicStudio() {
   const settings = useMusicSettings();
   const runtime = useMusicRuntime();
   return (
-    <div {...stylex.props(styles.studioLayout)}>
+    <div className="mx-auto max-w-220 px-8 pt-4 pb-12 max-sm:px-6 max-[380px]:px-4">
       <NowPlayingCard
         root={getMusicRoot(runtime.rootId)}
         runtime={runtime}

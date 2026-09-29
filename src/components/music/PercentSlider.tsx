@@ -1,4 +1,4 @@
-import { RangeField } from "@/components/ui/RangeField";
+import { RangeField } from "@/components/controls/RangeField";
 
 /** The shared slider backed by a value between zero and one. */
 export function PercentSlider({

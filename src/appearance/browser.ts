@@ -1,6 +1,4 @@
 import { useSyncExternalStore } from "react";
-import * as stylex from "@stylexjs/stylex";
-import { darkTheme } from "@/components/ui/theme";
 import { createAppearanceStore, type AppearanceSnapshot } from "./store";
 export const APPEARANCE_STORAGE_KEY = "lilt-appearance";
 const SERVER_SNAPSHOT: AppearanceSnapshot = { preference: "system", resolved: "light" };
@@ -15,11 +13,11 @@ export function getAppearanceStore() {
     apply: (appearance) => {
       const root = document.documentElement;
       root.dataset.appearance = appearance;
-      root.className = stylex.props(appearance === "dark" && darkTheme).className ?? "";
+      root.classList.toggle("dark", appearance === "dark");
       root.style.colorScheme = appearance;
       document
         .querySelector('meta[name="theme-color"]')
-        ?.setAttribute("content", appearance === "dark" ? "#171717" : "#fafafa");
+        ?.setAttribute("content", appearance === "dark" ? "#0a0a0a" : "#ffffff");
     },
     onSystemChange: (listener) => {
       media.addEventListener("change", listener);

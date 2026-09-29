@@ -1,11 +1,9 @@
-import * as stylex from "@stylexjs/stylex";
 import { getMusicRoot, MUSIC_ROOTS, type MusicRootId } from "@/audio/composition/roots";
 import { setMusicControlMode, useMusicSettings } from "@/audio/musicSettings";
 import { useMusicSession, useMusicSessionController } from "@/audio/playback/react";
-import { Field } from "@/components/ui/Field";
-import { Select } from "@/components/ui/Select";
-import { RangeField } from "@/components/ui/RangeField";
-import { styles } from "./styles";
+import { Field } from "@/components/controls/Field";
+import { OptionSelect } from "@/components/controls/OptionSelect";
+import { RangeField } from "@/components/controls/RangeField";
 
 export function StyleControls() {
   const settings = useMusicSettings();
@@ -14,10 +12,10 @@ export function StyleControls() {
   const preset = getMusicRoot(session.rootId);
   const automatic = settings.controlMode === "auto";
   return (
-    <div {...stylex.props(styles.basics, styles.grid)}>
+    <div className="border-t py-5 grid grid-cols-2 items-start gap-6 max-[540px]:grid-cols-1">
       <div>
         <Field label="Style">
-          <Select
+          <OptionSelect
             aria-label="Style"
             value={automatic ? "auto" : session.rootId}
             onValueChange={(value) => {
@@ -34,7 +32,7 @@ export function StyleControls() {
             ]}
           />
         </Field>
-        <p {...stylex.props(styles.hint, styles.styleHint)}>
+        <p className="mt-2 text-xs leading-normal text-muted-foreground">
           {automatic && `Now: ${preset.name}. `}
           {preset.description}
         </p>

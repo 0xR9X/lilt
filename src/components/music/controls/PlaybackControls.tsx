@@ -1,21 +1,19 @@
-import * as stylex from "@stylexjs/stylex";
 import { useMusicSession, useMusicSessionController } from "@/audio/playback/react";
-import { Switch } from "@/components/ui/Switch";
+import { SwitchField } from "@/components/controls/SwitchField";
 import { PercentSlider } from "../PercentSlider";
-import { styles } from "./styles";
 
 export function PlaybackControls() {
   const session = useMusicSession();
   const controller = useMusicSessionController();
   return (
-    <div {...stylex.props(styles.grid)}>
+    <div className="grid grid-cols-2 items-start gap-6 max-[540px]:grid-cols-1">
       <div>
-        <Switch
+        <SwitchField
           label="Keep playing"
           checked={session.autoAdvance}
           onCheckedChange={(value) => controller.setAutoAdvance(value)}
         />
-        <p {...stylex.props(styles.hint)}>Generate another track when this one ends.</p>
+        <p className="text-xs leading-normal text-muted-foreground">Generate another track when this one ends.</p>
       </div>
       <PercentSlider
         label="Natural timing"

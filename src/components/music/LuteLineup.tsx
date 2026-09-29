@@ -1,11 +1,9 @@
-import * as stylex from "@stylexjs/stylex";
-import { styles } from "@/components/music/styles";
 import { LUTE_TECHNIQUE_NAMES, type MusicLuteLineupEntry } from "@/audio/composition/lineup";
 import { getLuteStyle } from "@/audio/composition/roots";
 
 export function LuteLineup({ lineup }: { lineup: readonly MusicLuteLineupEntry[] }) {
   return (
-    <ul {...stylex.props(styles.lineup)}>
+    <ul>
       {lineup.map((entry) => (
         <li key={entry.part}>
           {entry.part === "strings" ? "Melody" : "Accompaniment"} · {getLuteStyle(entry.style).name} ·{" "}

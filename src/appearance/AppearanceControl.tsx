@@ -1,13 +1,14 @@
-import { Select } from "@/components/ui/Select";
-import { Field } from "@/components/ui/Field";
+import { OptionSelect } from "@/components/controls/OptionSelect";
+import { Field } from "@/components/controls/Field";
 import { getAppearanceStore, useAppearance } from "./browser";
 
 export function AppearanceControl() {
   const { preference } = useAppearance();
   return (
     <Field label="Appearance" inline compact>
-      <Select
+      <OptionSelect
         aria-label="Appearance"
+        className="w-28"
         value={preference}
         onValueChange={(next) => {
           if (next === "light" || next === "dark" || next === "system") getAppearanceStore().setPreference(next);

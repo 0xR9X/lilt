@@ -1,6 +1,6 @@
-import { Field } from "@/components/ui/Field";
-import { Select } from "@/components/ui/Select";
-import { RangeField } from "@/components/ui/RangeField";
+import { Field } from "@/components/controls/Field";
+import { OptionSelect } from "@/components/controls/OptionSelect";
+import { RangeField } from "@/components/controls/RangeField";
 
 /** Shared voicing controls for the melody and accompaniment lutes. */
 export function ChordControls({
@@ -19,7 +19,7 @@ export function ChordControls({
   return (
     <>
       <Field label="Chord size">
-        <Select
+        <OptionSelect
           aria-label={`${part} chord size`}
           value={String(maxNotes)}
           options={[

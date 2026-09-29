@@ -1,10 +1,8 @@
-import { Button } from "@/components/ui/Button";
-import * as stylex from "@stylexjs/stylex";
-import { styles } from "./styles";
+import { Button } from "@/components/ui/button";
 import { ECHO_LIMITS } from "@/audio/synthesis/effects/config";
 import { useMusicRuntime, useMusicSession, useMusicSessionController } from "@/audio/playback/react";
 import { PercentSlider } from "@/components/music/PercentSlider";
-import { Switch } from "@/components/ui/Switch";
+import { SwitchField } from "@/components/controls/SwitchField";
 import { EffectBlock, EffectSlider } from "./EffectControls";
 
 export function EffectsControls() {
@@ -14,13 +12,13 @@ export function EffectsControls() {
   const bypassed = session.effects.bypassed;
   return (
     <section aria-label="Effects controls">
-      <div {...stylex.props(styles.heading)}>
-        <Switch
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+        <SwitchField
           label="Effects enabled"
           checked={!bypassed}
           onCheckedChange={(enabled) => controller.setEffectsBypassed(!enabled)}
         />
-        <Button variant="quiet" onClick={() => controller.resetEffects()}>
+        <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => controller.resetEffects()}>
           Reset effects
         </Button>
       </div>

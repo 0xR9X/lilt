@@ -1,8 +1,9 @@
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { getMusicSettings } from "@/audio/musicSettings";
 import { reloadMusicSettingsFromStorage } from "@/test/music-settings";
 import { MusicStudio } from "@/components/music/MusicStudio";
+import { settle } from "@/test/dom";
 
 describe("Lilt studio", () => {
   beforeEach(() => {
@@ -12,7 +13,7 @@ describe("Lilt studio", () => {
   afterEach(cleanup);
   async function renderStudio() {
     render(<MusicStudio />);
-    await act(async () => {});
+    await settle();
   }
   test("starts quietly with an accessible player and generated cover", async () => {
     await renderStudio();

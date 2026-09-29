@@ -1,4 +1,3 @@
-import * as stylex from "@stylexjs/stylex";
 import { useAppearance } from "@/appearance/browser";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { coverArtDesign, type CoverArtSubject } from "@/audio/cover-art/design";
@@ -62,9 +61,13 @@ export function MusicCoverArt({ subject, size = 56, label = "Cover art" }: Music
     drawCoverArt(context, design, size);
   }, [design, size, devicePixelRatio]);
 
-  return <canvas ref={canvasRef} role="img" aria-label={label} {...stylex.props(styles.canvas(size))} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      role="img"
+      aria-label={label}
+      className="shrink-0 rounded-sm"
+      style={{ width: size, height: size }}
+    />
+  );
 }
-
-const styles = stylex.create({
-  canvas: (size: number) => ({ width: size, height: size, flexShrink: 0, borderRadius: 4 }),
-});

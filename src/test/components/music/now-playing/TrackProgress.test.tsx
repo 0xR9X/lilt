@@ -7,6 +7,9 @@ vi.mock("@/audio/playback/react", () => ({
   useMusicSessionController: () => ({ seek: mocks.seek }),
 }));
 import { TrackProgress } from "@/components/music/now-playing/TrackProgress";
+import { settle } from "@/test/dom";
+
+const pointer = { pointerId: 1, pointerType: "mouse", clientY: 8 };
 
 describe("player seeking", () => {
   beforeEach(() => {
@@ -16,36 +19,33 @@ describe("player seeking", () => {
   });
   afterEach(cleanup);
 
-  test("previews a pointer scrub and seeks only when released", () => {
-    render(<TrackProgress duration={100} />);
-    const slider = screen.getByRole("slider", { name: "Music position" });
-    fireEvent.change(slider, { target: { value: "40" } });
-    expect(screen.getByText("0:40")).toBeTruthy();
+  test("previews a pointer scrub and seeks only when released", async () => {
+    const view = render(<TrackProgress duration={100} />);
+    await settle();
+    const control = view.container.querySelector("[data-base-ui-slider-control]")!;
+    fireEvent.pointerDown(control, { ...pointer, button: 0, clientX: 0 });
+    fireEvent.pointerMove(document, { ...pointer, buttons: 1, clientX: 100 });
+    expect(screen.getByText("1:40", { selector: "span:first-child" })).toBeTruthy();
     expect(mocks.seek).not.toHaveBeenCalled();
-    fireEvent.pointerUp(slider);
-    expect(mocks.seek).toHaveBeenCalledExactlyOnceWith(40);
+    fireEvent.pointerUp(document, { ...pointer, clientX: 100 });
+    expect(mocks.seek).toHaveBeenCalledExactlyOnceWith(100);
+    expect(screen.getByText("0:20", { selector: "span:first-child" })).toBeTruthy();
   });
 
-  test("supports keyboard seeking and commits an edit when focus leaves", () => {
+  test("seeks as soon as the keyboard or an input change moves the position", async () => {
     render(<TrackProgress duration={100} />);
+    await settle();
     const slider = screen.getByRole("slider", { name: "Music position" });
-    fireEvent.change(slider, { target: { value: "25" } });
-    fireEvent.keyUp(slider, { key: "ArrowRight" });
-    expect(mocks.seek).toHaveBeenLastCalledWith(25);
+    fireEvent.keyDown(slider, { key: "ArrowRight" });
+    expect(mocks.seek).toHaveBeenLastCalledWith(20.5);
     fireEvent.change(slider, { target: { value: "50" } });
-    fireEvent.blur(slider);
     expect(mocks.seek).toHaveBeenLastCalledWith(50);
   });
 
-  test("cancels an interrupted scrub and disables seeking while paused", () => {
-    const view = render(<TrackProgress duration={100} />);
-    const slider = screen.getByRole("slider", { name: "Music position" }) as HTMLInputElement;
-    fireEvent.change(slider, { target: { value: "60" } });
-    fireEvent.pointerCancel(slider);
-    expect(mocks.seek).not.toHaveBeenCalled();
-    expect(slider.valueAsNumber).toBe(20);
+  test("disables seeking while paused", async () => {
     mocks.runtime.status = "stopped";
-    view.rerender(<TrackProgress duration={100} />);
-    expect(slider.disabled).toBe(true);
+    render(<TrackProgress duration={100} />);
+    await settle();
+    expect((screen.getByRole("slider", { name: "Music position" }) as HTMLInputElement).disabled).toBe(true);
   });
 });

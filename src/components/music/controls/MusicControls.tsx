@@ -1,15 +1,13 @@
-import * as stylex from "@stylexjs/stylex";
-import { Disclosure } from "@/components/ui/Disclosure";
+import { Disclosure } from "@/components/controls/Disclosure";
 import { EffectsControls } from "../effects/EffectsControls";
 import { StyleControls } from "./StyleControls";
 import { MelodyControls } from "./MelodyControls";
 import { AccompanimentControls } from "./AccompanimentControls";
 import { PlaybackControls } from "./PlaybackControls";
-import { styles } from "./styles";
 
 export function MusicControls() {
   return (
-    <section aria-label="Music settings" {...stylex.props(styles.root)}>
+    <section aria-label="Music settings" className="mt-6 border-b">
       <StyleControls />
       <Disclosure title="Melody" description="Shape, variation, and harmony">
         <MelodyControls />

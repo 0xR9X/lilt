@@ -1,8 +1,6 @@
-import * as stylex from "@stylexjs/stylex";
-import { styles } from "./styles";
 import type { ReactNode } from "react";
-import { Switch } from "@/components/ui/Switch";
-import { RangeField } from "@/components/ui/RangeField";
+import { SwitchField } from "@/components/controls/SwitchField";
+import { RangeField } from "@/components/controls/RangeField";
 
 export function EffectSlider({
   label,
@@ -55,9 +53,23 @@ export function EffectBlock({
   children: ReactNode;
 }) {
   return (
-    <div role="group" aria-label={`${name} effect`} {...stylex.props(styles.effectRow)}>
-      <Switch label={name} ariaLabel={name} checked={enabled} disabled={bypassed} onCheckedChange={onEnabledChange} />
-      {enabled && !bypassed && <div {...stylex.props(styles.effectParameters)}>{children}</div>}
+    <div
+      role="group"
+      aria-label={`${name} effect`}
+      className="grid grid-cols-[128px_minmax(0,1fr)] items-start gap-x-6 gap-y-2 py-2 max-sm:grid-cols-1"
+    >
+      <SwitchField
+        label={name}
+        ariaLabel={name}
+        checked={enabled}
+        disabled={bypassed}
+        onCheckedChange={onEnabledChange}
+      />
+      {enabled && !bypassed && (
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(110px,1fr))] gap-4 py-1 max-sm:grid-cols-2 max-sm:pl-9">
+          {children}
+        </div>
+      )}
     </div>
   );
 }

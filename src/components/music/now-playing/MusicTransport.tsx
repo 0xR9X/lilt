@@ -1,15 +1,12 @@
-import { Button } from "@/components/ui/Button";
-import { Slider } from "@/components/ui/Slider";
-import * as stylex from "@stylexjs/stylex";
-import { styles } from "@/components/music/styles";
+import type { ComponentProps } from "react";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 import { getMusicApplication } from "@/audio/application";
 import { notify } from "@/app/notifications/store";
 import { useMusicRuntime, useMusicSessionController } from "@/audio/playback/react";
 import { setMusicEnabled, setMusicVolume } from "@/audio/musicSettings";
-import { useId } from "react";
 
 export function MusicTransport({ enabled, volume }: { enabled: boolean; volume: number }) {
-  const volumeId = useId();
   const controller = useMusicSessionController();
   const runtime = useMusicRuntime();
   const playing = enabled && (runtime.status === "playing" || runtime.status === "gap");
@@ -26,50 +23,63 @@ export function MusicTransport({ enabled, volume }: { enabled: boolean; volume: 
     }
   };
   return (
-    <div {...stylex.props(styles.transportControls)}>
-      <div {...stylex.props(styles.playbackControls)}>
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between gap-4">
         <Button
-          type="button"
-          variant="primary"
+          size="lg"
+          className="min-w-19"
           aria-label={playing ? "Pause music" : "Play music"}
           onClick={() => void togglePlayback()}
         >
           {playing ? "Pause" : "Play"}
         </Button>
-        <label htmlFor={volumeId} {...stylex.props(styles.volumeControl)}>
+        <div className="flex w-39 items-center gap-3 text-[11px] text-muted-foreground">
           Volume
           <Slider
-            id={volumeId}
             aria-label="Music volume"
             aria-valuetext={`${Math.round(volume * 100)}%`}
             min={0}
             max={100}
             step={1}
             value={volume * 100}
-            onChange={(event) => setMusicVolume(event.currentTarget.valueAsNumber / 100)}
+            onValueChange={(next) => setMusicVolume(next / 100)}
           />
-        </label>
+        </div>
       </div>
-      <div {...stylex.props(styles.compositionActions)}>
-        <Button
-          type="button"
+      <div className="grid grid-cols-2 gap-2">
+        <CompositionButton
           description="New style & sound"
           aria-label="Randomize song"
           title="Generate a new track with a different style and effects. Reset tempo, song structure, and key choices."
           onClick={() => controller.randomize()}
         >
           Randomize
-        </Button>
-        <Button
-          type="button"
+        </CompositionButton>
+        <CompositionButton
           description="Keep style & sound"
           aria-label="New track"
           title="Generate a new track with the current style, effects, tempo, song structure, and key choices."
           onClick={() => controller.newComposition()}
         >
           New track
-        </Button>
+        </CompositionButton>
       </div>
     </div>
+  );
+}
+
+function CompositionButton({
+  description,
+  children,
+  ...props
+}: { description: string; children: string } & Pick<
+  ComponentProps<typeof Button>,
+  "aria-label" | "title" | "onClick"
+>) {
+  return (
+    <Button {...props} variant="outline" className="h-auto flex-col gap-0.5 py-2">
+      {children}
+      <span className="text-[11px] font-normal text-muted-foreground">{description}</span>
+    </Button>
   );
 }

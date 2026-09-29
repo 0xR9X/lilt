@@ -1,6 +1,4 @@
-import { Disclosure } from "@/components/ui/Disclosure";
-import * as stylex from "@stylexjs/stylex";
-import { styles } from "@/components/music/styles";
+import { Disclosure } from "@/components/controls/Disclosure";
 import { MUSIC_FORM_LABELS, type MusicRoot } from "@/audio/composition/roots";
 import type { MusicRuntimeSnapshot } from "@/audio/playback/types";
 import { MusicCoverArt } from "../MusicCoverArt";
@@ -23,22 +21,25 @@ export function NowPlayingCard({
 }) {
   const sounding = enabled && (runtime.status === "playing" || runtime.status === "gap");
   return (
-    <section {...stylex.props(styles.player)} aria-label="Music player">
-      <div {...stylex.props(styles.currentTrack)}>
+    <section
+      className="grid grid-cols-[minmax(0,1fr)_300px] items-center gap-6 max-sm:grid-cols-1 max-sm:gap-4"
+      aria-label="Music player"
+    >
+      <div className="flex min-w-0 items-center gap-4">
         <MusicCoverArt subject={runtime} size={64} label={`Cover of ${runtime.name}`} />
-        <div {...stylex.props(styles.trackInfo)}>
-          <p {...stylex.props(styles.playerStatus)}>
+        <div className="min-w-0">
+          <p className="text-[11px] text-muted-foreground">
             {sounding ? musicStatusLabel(runtime.status) : runtime.status === "error" ? "Audio unavailable" : "Paused"}
           </p>
-          <h2 {...stylex.props(styles.trackTitle)}>{runtime.name}</h2>
-          <p {...stylex.props(styles.trackMeta)}>
+          <h2 className="my-1 text-xl leading-snug font-medium tracking-[-0.5px] wrap-anywhere">{runtime.name}</h2>
+          <p className="text-xs text-muted-foreground">
             {root.name} · {runtime.piece.bpm} BPM
           </p>
         </div>
       </div>
       <MusicTransport enabled={enabled} volume={volume} />
       <TrackProgress duration={runtime.durationSeconds} />
-      <div {...stylex.props(styles.trackDetails)}>
+      <div className="col-span-full -mt-3">
         <Disclosure title="Track details" compact>
           <p>
             {MUSIC_FORM_LABELS[runtime.form]} · {root.meter} · {noteName(runtime.tonicMidi)} {root.mode}
@@ -47,7 +48,7 @@ export function NowPlayingCard({
         </Disclosure>
       </div>
       {runtime.status === "error" && (
-        <p role="alert" {...stylex.props(styles.audioError)}>
+        <p role="alert" className="col-span-full text-destructive">
           Audio unavailable. Press Play to retry.
         </p>
       )}

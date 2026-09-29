@@ -1,31 +1,29 @@
-import * as stylex from "@stylexjs/stylex";
 import { getMusicRoot, MUSIC_FORM_LABELS, type MusicPieceForm } from "@/audio/composition/roots";
 import { useMusicSession, useMusicSessionController } from "@/audio/playback/react";
-import { Field } from "@/components/ui/Field";
-import { Select } from "@/components/ui/Select";
-import { Switch } from "@/components/ui/Switch";
-import { Button } from "@/components/ui/Button";
+import { Field } from "@/components/controls/Field";
+import { OptionSelect } from "@/components/controls/OptionSelect";
+import { SwitchField } from "@/components/controls/SwitchField";
+import { Button } from "@/components/ui/button";
 import { PercentSlider } from "../PercentSlider";
 import { noteName } from "../music-labels";
 import { ChordControls } from "./ChordControls";
-import { styles } from "./styles";
 
 export function MelodyControls() {
   const session = useMusicSession();
   const controller = useMusicSessionController();
   const preset = getMusicRoot(session.rootId);
   return (
-    <div {...stylex.props(styles.stack)}>
-      <Switch
+    <div className="flex flex-col gap-6">
+      <SwitchField
         label="Play melody"
         checked={!session.mutedParts.strings}
         onCheckedChange={(enabled) => controller.setPartMuted("strings", !enabled)}
       />
       {!session.mutedParts.strings && (
-        <div {...stylex.props(styles.grid)}>
+        <div className="grid grid-cols-2 items-start gap-6 max-[540px]:grid-cols-1">
           {preset.forms.length > 1 && (
             <Field label="Song structure">
-              <Select
+              <OptionSelect
                 aria-label="Song structure"
                 value={session.formOverride ?? "auto"}
                 options={[
@@ -39,7 +37,7 @@ export function MelodyControls() {
             </Field>
           )}
           <Field label="Key">
-            <Select
+            <OptionSelect
               aria-label="Key"
               value={session.tonicOverride?.toString() ?? "auto"}
               options={[
@@ -73,8 +71,13 @@ export function MelodyControls() {
               onStrumChange={(strumMs) => controller.setChords({ strumMs })}
             />
           )}
-          <div {...stylex.props(styles.fullWidth)}>
-            <Button variant="quiet" onClick={() => controller.resetChords()}>
+          <div className="col-span-full">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground"
+              onClick={() => controller.resetChords()}
+            >
               Reset melody harmony
             </Button>
           </div>
