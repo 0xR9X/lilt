@@ -34,6 +34,16 @@ export function App() {
       <main id="studio" tabIndex={-1} className="outline-none">
         <MusicStudio />
       </main>
+      <footer className="mx-auto max-w-220 px-8 pb-8 text-sm text-muted-foreground max-sm:px-6 max-[380px]:px-4">
+        <a
+          className="rounded-sm underline-offset-4 outline-none hover:text-foreground hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+          href="https://github.com/0xR9X/lilt"
+          target="_blank"
+          rel="noreferrer"
+        >
+          GitHub
+        </a>
+      </footer>
       <NotificationBanner />
     </>
   );
